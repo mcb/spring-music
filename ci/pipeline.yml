@@ -1,0 +1,30 @@
+---
+jobs:
+- name: make-jar-not-war
+  plan:
+  - get: spring-music
+    trigger: true
+  - task: gradle
+    file: spring-music/ci/tasks/build.yml
+  - put: deployment
+    params:
+      manifest: spring-music/manifest.yml
+      path: jar/spring-music.jar
+      current_app_name: spring-music
+
+resources:
+- name: spring-music
+  type: git
+  source:
+    uri: {{repository}}
+    branch: {{branch}}
+
+- name: deployment
+  type: cf
+  source:
+    api: {{cf-api}}
+    username: {{cf-email}}
+    password: {{cf-password}}
+    organization: {{cf-org}}
+    space: {{cf-space}}
+    skip_cert_check: true

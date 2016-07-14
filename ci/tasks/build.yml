@@ -1,0 +1,24 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: java
+    tag: "8"
+
+inputs:
+  - name: spring-music
+
+outputs:
+  - name: jar
+
+run:
+  path: sh
+  args:
+  - -exc
+  - |
+    curl -L -o gradle.zip "https://services.gradle.org/distributions/gradle-2.12-bin.zip"
+    unzip gradle.zip
+    cd spring-music && ../gradle-2.12/bin/gradle build -Pversion=$(git describe --always) --console plain
+    cp build/libs/spring-music.jar ../jar/spring-music.jar
