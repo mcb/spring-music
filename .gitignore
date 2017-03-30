@@ -18,3 +18,5 @@ target/
 build/
 
 *.log*
+
+params.yml
