@@ -62,7 +62,7 @@ jobs:
   - get: spring-music-repo
   - put: dev-deployment
     params:
-      manifest: spring-music/manifest.yml
+      manifest: spring-music-repo/manifest.yml
       path: spring-music-release/spring-music-*.jar
 
 - name: push-to-prod
@@ -73,5 +73,5 @@ jobs:
   - get: spring-music-repo
   - put: prod-deployment
     params:
-      manifest: spring-music/manifest.yml
+      manifest: spring-music-repo/manifest.yml
       path: spring-music-release/spring-music-*.jar
