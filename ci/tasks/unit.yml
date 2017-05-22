@@ -8,10 +8,7 @@ image_resource:
     tag: "8"
 
 inputs:
-  - name: spring-music
-
-outputs:
-  - name: jar
+  - name: spring-music-repo
 
 run:
   path: sh
@@ -20,5 +17,4 @@ run:
   - |
     curl -L -o gradle.zip "https://services.gradle.org/distributions/gradle-2.12-bin.zip"
     unzip gradle.zip
-    cd spring-music && ../gradle-2.12/bin/gradle build -Pversion=$(git describe --always) --console plain
-    cp build/libs/spring-music.jar ../jar/spring-music.jar
+    cd spring-music-repo && ../gradle-2.12/bin/gradle test

@@ -1,25 +1,21 @@
 ---
-jobs:
-- name: make-jar-not-war
-  plan:
-  - get: spring-music
-    trigger: true
-  - task: gradle
-    file: spring-music/ci/tasks/build.yml
-  - put: deployment
-    params:
-      manifest: spring-music/manifest.yml
-      path: jar/spring-music.jar
-      current_app_name: spring-music
-
 resources:
-- name: spring-music
+- name: spring-music-repo
   type: git
   source:
     uri: {{repository}}
     branch: {{branch}}
 
-- name: deployment
+- name: spring-music-release
+  type: s3
+  source:
+    bucket: {{s3-bucket}}
+    regexp: spring-music-(.*).jar
+    access_key_id: {{s3-access-key-id}}
+    secret_access_key: {{s3-secret-access-key}}
+    region_name: {{s3-region-name}}
+
+- name: dev-deployment
   type: cf
   source:
     api: {{cf-api}}
@@ -28,3 +24,54 @@ resources:
     organization: {{cf-org}}
     space: {{cf-space}}
     skip_cert_check: true
+
+- name: prod-deployment
+  type: cf
+  source:
+    api: {{prod-cf-api}}
+    username: {{prod-cf-email}}
+    password: {{prod-cf-password}}
+    organization: {{prod-cf-org}}
+    space: {{prod-cf-space}}
+    skip_cert_check: true
+
+jobs:
+- name: unit-test
+  plan:
+  - get: spring-music-repo
+    trigger: true
+  - task: unit
+    file: spring-music-repo/ci/tasks/unit.yml
+
+- name: build-binary
+  plan:
+  - get: spring-music-repo
+    passed: [unit-test]
+    trigger: true
+  - task: build-artifact
+    file: spring-music-repo/ci/tasks/build-artifact.yml
+    timeout: 5m
+  - put: spring-music-release
+    params: {file: binaries/spring-music*.jar }
+
+- name: push-to-dev
+  plan:
+  - get: spring-music-release
+    passed: [build-binary]
+    trigger: true
+  - get: spring-music-repo
+  - put: dev-deployment
+    params:
+      manifest: spring-music/manifest.yml
+      path: spring-music-release/spring-music-*.jar
+
+- name: push-to-prod
+  plan:
+  - get: spring-music-release
+    passed: [push-to-dev]
+    trigger: true
+  - get: spring-music-repo
+  - put: prod-deployment
+    params:
+      manifest: spring-music/manifest.yml
+      path: spring-music-release/spring-music-*.jar

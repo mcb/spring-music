@@ -1,0 +1,19 @@
+repository: https://github.com/mcb/spring-music.git
+branch: concourse
+
+cf-api: CHANGEME
+cf-email: CHANGEME
+cf-password: CHANGEME
+cf-org: CHANGEME
+cf-space: CHANGEME
+
+prod-cf-api: CHANGEME
+prod-cf-email: CHANGEME
+prod-cf-password: CHANGEME
+prod-cf-org: CHANGEME
+prod-cf-space: CHANGEME
+
+s3-access-key-id: CHANGEME
+s3-secret-access-key: CHANGEME
+s3-bucket: spring-music
+s3-region-name: CHANGEME
