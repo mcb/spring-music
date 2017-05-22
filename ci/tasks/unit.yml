@@ -15,6 +15,6 @@ run:
   args:
   - -exc
   - |
-    curl -L -o gradle.zip "https://services.gradle.org/distributions/gradle-2.12-bin.zip"
+    curl -L -o gradle.zip "https://services.gradle.org/distributions/gradle-3.5-bin.zip"
     unzip gradle.zip
-    cd spring-music-repo && ../gradle-2.12/bin/gradle test
+    cd spring-music-repo && ../gradle-3.5/bin/gradle test

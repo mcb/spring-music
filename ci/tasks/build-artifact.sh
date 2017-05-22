@@ -2,11 +2,11 @@
 set -e
 
 
-curl -L -o gradle.zip "https://services.gradle.org/distributions/gradle-2.12-bin.zip"
+curl -L -o gradle.zip "https://services.gradle.org/distributions/gradle-3.5-bin.zip"
 unzip gradle.zip
 cd spring-music-repo 
 export git_version = $(git describe --always)
-../gradle-2.12/bin/gradle build -Pversion=$(git_version) --console plain
+../gradle-3.5/bin/gradle build -Pversion=$(git_version) --console plain
 
 cd ..
 pwd
