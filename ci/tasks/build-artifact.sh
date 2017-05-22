@@ -5,7 +5,7 @@ set -e
 curl -L -o gradle.zip "https://services.gradle.org/distributions/gradle-3.5-bin.zip"
 unzip gradle.zip
 cd spring-music-repo 
-export git_version = $(git describe --always)
+export GIT_VERSION=$(git describe --always)
 ../gradle-3.5/bin/gradle build -Pversion=$(git_version) --console plain
 
 cd ..
