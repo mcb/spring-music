@@ -9,5 +9,5 @@ export GIT_VERSION=$(git describe --always)
 ../gradle-3.5/bin/gradle build -Pversion=$GIT_VERSION --console plain
 
 cd ..
-cp build/libs/spring-music.jar binaries/spring-music-$GIT_VERSION.jar
+cp spring-music-repo/build/libs/spring-music.jar binaries/spring-music-$GIT_VERSION.jar
 ls -l binaries/
